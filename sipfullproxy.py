@@ -396,7 +396,9 @@ class UDPHandler(socketserver.BaseRequestHandler):
                 self.processAck()
                 last_message = "ACK"
             elif rx_bye.search(request_uri):
-                logging.info("%s - hovor bol ukonceny" % self.data[5])
+                orig = self.getOrigin()
+                dest = self.getDestination()
+                logging.info("%s - hovor medzi %s a %s bol UKONCENY (zo strany %s)" % (self.data[5], orig, dest, orig))
                 self.processNonInvite()
                 last_message = "BYE"
             elif rx_cancel.search(request_uri):
@@ -434,7 +436,6 @@ class UDPHandler(socketserver.BaseRequestHandler):
             else:
                 logging.error("request_uri %s" % request_uri)
                 # print "message %s unknown" % self.data
-
 
     def handle(self):
         # socket.setdefaulttimeout(120)
